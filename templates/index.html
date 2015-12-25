@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+	<!-- <h1>HVAC and fan remote</h1> -->
+	<div>
+		<p id="clock"></p>
+		<p>
+			Last reading: <span id="last-reading"></span>
+		</p>		
+		<p>
+			Room temperature: <mark><span id="room-temperature"></span></mark>F
+		</p>
+		<p>
+			Humidity : <mark><span id="humidity"></span></mark>%
+		</p>
+		<p>
+			Cool status: <span id="cool-status"></span>, <span id="cool-current-temperature"></span>
+		</p>
+		<p>
+			Heat status: <span id="heat-status"></span>, <span id="heat-current-temperature"></span>
+		</p>
+		<p>
+			Fan status: <span id="fan-status"></span>
+		</p>
+	</div>
+
+	<div>
+		Cool
+		<div>
+			<input id="coolTemperature" type="number" name="coolTemperature" min="60" max="90" placeholder="60-90F">
+			<input type="radio" name="coolSwitch" value="0">Off
+			<input type="radio" name="coolSwitch" value="1">On
+		</div>
+
+	</div>
+
+	<div>
+		Heat
+		<div>
+			<input id="heatTemperature" type="number" name="heatTemperature" min="60" max="90" placeholder="60-90F">
+			<input type="radio" name="heatSwitch" value="0">Off
+			<input type="radio" name="heatSwitch" value="1">On
+		</div>
+	</div>
+
+	<div>
+		Fan
+		<input type="radio" name="fanSwitch" value="0">Off
+		<input type="radio" name="fanSwitch" value="1">On
+	</div>
+{% endblock %}
