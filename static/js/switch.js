@@ -134,7 +134,7 @@ $(function(){
 					$coolSwitchRadioArray[0].checked = true;
 				}
 			}
-			console.log(dataToSend);
+
 			$.ajax({
 				url: '/status',
 				type: 'POST',
@@ -142,8 +142,7 @@ $(function(){
 				contentType: 'application/json; charset=utf-8',
 				timeout: 20000, // give the A/C 20 seconds
 				success: function(data){
-					console.log('got response');
-					console.log(data);
+					
 				},
 				error: function(error){
 					alert('HVAC/fan did not get your request!');
