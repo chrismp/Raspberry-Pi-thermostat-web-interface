@@ -28,14 +28,15 @@ $(function(){
 	$.get(
 		'/status',
 		function(data){
-			var timeLastRead = data.timeLastRead;
-			var roomTemperature = roundInt(data.roomTemperature);
-			var humidity = roundInt(data.humidity);
-			var coolSwitch = data.coolSwitch;
-			var coolTemperature = data.coolTemperature;
-			var heatSwitch = data.heatSwitch;
-			var heatTemperature = data.heatTemperature;
-			var fanSwitch = data.fanSwitch;
+			var status = data['Status'];
+			var timeLastRead = status.timeLastRead;
+			var roomTemperature = roundInt(status.roomTemperature);
+			var humidity = roundInt(status.humidity);
+			var coolSwitch = status.coolSwitch;
+			var coolTemperature = status.coolTemperature;
+			var heatSwitch = status.heatSwitch;
+			var heatTemperature = status.heatTemperature;
+			var fanSwitch = status.fanSwitch;
 
 			$coolTemperature.val(coolTemperature);
 			$heatTemperature.val(heatTemperature);
@@ -133,7 +134,7 @@ $(function(){
 					$coolSwitchRadioArray[0].checked = true;
 				}
 			}
-
+			console.log(dataToSend);
 			$.ajax({
 				url: '/status',
 				type: 'POST',
@@ -141,8 +142,8 @@ $(function(){
 				contentType: 'application/json; charset=utf-8',
 				timeout: 20000, // give the A/C 20 seconds
 				success: function(data){
-					// console.log('got response');
-					// console.log(data);
+					console.log('got response');
+					console.log(data);
 				},
 				error: function(error){
 					alert('HVAC/fan did not get your request!');

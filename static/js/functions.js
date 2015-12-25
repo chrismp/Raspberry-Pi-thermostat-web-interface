@@ -25,15 +25,19 @@ function updateStatus(coolStatusElem, coolCurrentTemperatureElem, heatStatusElem
 	$.get(
 		'/status',
 		function(data){
-			var timeLastRead = data.timeLastRead;
-			var roomTemperature = roundInt(data.roomTemperature);
-			var humidity = roundInt(data.humidity);
-			var coolSwitch = data.coolSwitch;
-			var coolTemperature = data.coolTemperature;
-			var heatSwitch = data.heatSwitch;
-			var heatTemperature = data.heatTemperature;
-			var fanSwitch = data.fanSwitch;
+			var status = data['Status'];
+			if(status===null){
+				return false;
+			}
 
+			var timeLastRead = status.timeLastRead;
+			var roomTemperature = roundInt(status.roomTemperature);
+			var humidity = roundInt(status.humidity);
+			var coolSwitch = status.coolSwitch;
+			var coolTemperature = status.coolTemperature;
+			var heatSwitch = status.heatSwitch;
+			var heatTemperature = status.heatTemperature;
+			var fanSwitch = status.fanSwitch;
 			lastReadingElem.html(new Date(timeLastRead*1000));
 			coolStatusElem.html(translateSwitch(coolSwitch));
 			coolCurrentTemperatureElem.html(translateTemperature(coolTemperature));
@@ -47,7 +51,7 @@ function updateStatus(coolStatusElem, coolCurrentTemperatureElem, heatStatusElem
 }
 
 function translateSwitch(status){
-	return status===0 ? 'Off' : 'On';
+	return status===1 ? 'On' : 'Off';
 }
 
 function translateTemperature(temp){

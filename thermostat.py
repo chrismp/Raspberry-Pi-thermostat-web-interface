@@ -1,10 +1,13 @@
 from flask import Flask, render_template, flash, redirect, jsonify, request
 import datetime
 import time
-import db
-import methods
 import sys 
 import os
+
+# my scripts
+import db
+import methods
+
 
 app = Flask(__name__, static_url_path='')
 
@@ -34,6 +37,7 @@ def update():
 	heatSwitch = response['heatSwitch']
 	heatTemperature = response['heatTemperature']
 	fanSwitch = response['fanSwitch']
+
 
 	# add current status received from Pi to database
 	db.addStatus(
@@ -116,19 +120,23 @@ def status():
 			)
 		)
 
-	# print('/status')
-	# print(desiredStatus)
 	currentLog = db.getLastStatus()
-	print(currentLog)
+	if currentLog==None:
+		return jsonify({'Status':None})
+
 	return jsonify(
-		timeLastRead = currentLog['unixTime'],
-		roomTemperature = currentLog['roomTemperature'],
-		humidity = currentLog['humidity'],
-		coolSwitch = currentLog['coolSwitch'],
-		coolTemperature = currentLog['coolTemperature'],
-		heatSwitch = currentLog['heatSwitch'],
-		heatTemperature = currentLog['heatTemperature'],
-		fanSwitch = currentLog['fanSwitch']
+		{
+			'Status':{
+				'timeLastRead': currentLog['unixTime'],
+				'roomTemperature': currentLog['roomTemperature'],
+				'humidity': currentLog['humidity'],
+				'coolSwitch': currentLog['coolSwitch'],
+				'coolTemperature': currentLog['coolTemperature'],
+				'heatSwitch': currentLog['heatSwitch'],
+				'heatTemperature': currentLog['heatTemperature'],
+				'fanSwitch': currentLog['fanSwitch']	
+			}
+		}
 	)
 
 if __name__=='__main__':
