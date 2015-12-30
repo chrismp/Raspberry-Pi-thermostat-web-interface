@@ -16,7 +16,8 @@ desiredStatus = {
 	'coolTemperature': None,
 	'heatSwitch': 0,
 	'heatTemperature': None,
-	'fanSwitch': 0
+	'fanSwitch': 0,
+        'fahrenheit': 0
 }
 
 
@@ -37,6 +38,12 @@ def update():
 	heatSwitch = response['heatSwitch']
 	heatTemperature = response['heatTemperature']
 	fanSwitch = response['fanSwitch']
+	preferFahrenheit = int(response['preferFahrenheitfahrenheit'])
+
+	if preferFahrenheit==1:
+                roomTemperature = convertToC(roomTemperature)
+                coolTemperature = convertToC(coolTemperature)
+                heatTemperature = convertToC(heatTemperature)
 
 
 	# add current status received from Pi to database
