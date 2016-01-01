@@ -7,7 +7,7 @@
 			Last reading: <span id="last-reading"></span>
 		</p>		
 		<p>
-			Room temperature: <mark><span id="room-temperature"></span></mark>F
+			Room temperature: <mark><span id="room-temperature"></span></mark><span id="temperature-unit"></span>
 		</p>
 		<p>
 			Humidity : <mark><span id="humidity"></span></mark>%
@@ -26,7 +26,8 @@
 	<div>
 		Cool
 		<div>
-			<input id="coolTemperature" type="number" name="coolTemperature" min="60" max="90" placeholder="60-90F">
+			<!-- <input id="coolTemperature" type="number" name="coolTemperature" min="60" max="90" placeholder="60-90F"> -->
+			<input id="coolTemperature" type="number" name="coolTemperature" min="15" max="35" placeholder="15-35C">
 			<input type="radio" name="coolSwitch" value="0">Off
 			<input type="radio" name="coolSwitch" value="1">On
 		</div>
@@ -36,7 +37,7 @@
 	<div>
 		Heat
 		<div>
-			<input id="heatTemperature" type="number" name="heatTemperature" min="60" max="90" placeholder="60-90F">
+			<input id="heatTemperature" type="number" name="coolTemperature" min="15" max="35" placeholder="15-35C">
 			<input type="radio" name="heatSwitch" value="0">Off
 			<input type="radio" name="heatSwitch" value="1">On
 		</div>
