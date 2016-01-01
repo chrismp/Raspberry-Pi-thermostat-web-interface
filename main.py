@@ -16,8 +16,7 @@ desiredStatus = {
 	'coolTemperature': None,
 	'heatSwitch': 0,
 	'heatTemperature': None,
-	'fanSwitch': 0,
-        'fahrenheit': 0
+	'fanSwitch': 0
 }
 
 
@@ -110,6 +109,7 @@ def status():
 			else:
 				desiredStatus['fanSwitch'] = 0
 
+                print desiredStatus
 		db.addStatus(
 			(
 				time.time(),
