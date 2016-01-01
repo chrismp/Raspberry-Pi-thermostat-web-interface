@@ -38,7 +38,7 @@ def update():
 	heatSwitch = response['heatSwitch']
 	heatTemperature = response['heatTemperature']
 	fanSwitch = response['fanSwitch']
-	preferFahrenheit = int(response['preferFahrenheitfahrenheit'])
+
 
 	if preferFahrenheit==1:
                 roomTemperature = convertToC(roomTemperature)
