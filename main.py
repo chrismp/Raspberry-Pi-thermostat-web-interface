@@ -122,6 +122,7 @@ def status():
 				desiredStatus['fanSwitch']
 			)
 		)
+		return jsonify(desiredStatus)
 
 	currentLog = db.getLastStatus()
 	if currentLog==None:
