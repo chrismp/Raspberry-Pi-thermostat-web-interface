@@ -59,11 +59,13 @@ def update():
 @app.route('/status', methods=['GET','POST'])
 def status():
 	currentLog = db.getLastStatus()
+	print currentLog # debugging only
 
 	# Sets new desired state based on user input.
 	# Return current state of HVAC and fan
 	if request.method == 'POST':
 		response = request.json
+		print response # debugging only
 
 		# `response` won't have all the keys `desiredStatus` has.
 		# So go thru each key in `desiredStatus`.
