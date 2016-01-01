@@ -31,8 +31,8 @@ function updateStatus(coolStatusElem, coolCurrentTemperatureElem, heatStatusElem
 			}
 
 			var timeLastRead = status.timeLastRead;
-			var roomTemperature = roundInt(status.roomTemperature);
-			var humidity = roundInt(status.humidity);
+			var roomTemperature = status.roomTemperature;
+			var humidity = status.humidity;
 			var coolSwitch = status.coolSwitch;
 			var coolTemperature = status.coolTemperature;
 			var heatSwitch = status.heatSwitch;
