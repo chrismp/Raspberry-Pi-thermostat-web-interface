@@ -40,12 +40,6 @@ def update():
 	fanSwitch = response['fanSwitch']
 
 
-	if preferFahrenheit==1:
-                roomTemperature = convertToC(roomTemperature)
-                coolTemperature = convertToC(coolTemperature)
-                heatTemperature = convertToC(heatTemperature)
-
-
 	# add current status received from Pi to database
 	db.addStatus(
 		(
