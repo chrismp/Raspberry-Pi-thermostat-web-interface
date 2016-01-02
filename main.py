@@ -11,14 +11,23 @@ import methods
 
 app = Flask(__name__, static_url_path='')
 
-desiredStatus = {
-	'coolSwitch': 0,
-	'coolTemperature': None,
-	'heatSwitch': 0,
-	'heatTemperature': None,
-	'fanSwitch': 0
-}
-
+if db.getLastStatus()==None:
+	desiredStatus = {
+		'coolSwitch': 0,
+		'coolTemperature': None,
+		'heatSwitch': 0,
+		'heatTemperature': None,
+		'fanSwitch': 0
+	}
+else:
+	lastRow = db.getLastStatus()
+	desiredStatus = {
+		'coolSwitch': lastRow['coolSwitch'],
+		'coolTemperature': lastRow['coolTemperature'],
+		'heatSwitch': lastRow['heatSwitch'],
+		'heatTemperature': lastRow['heatTemperature'],
+		'fanSwitch': lastRow['fanSwitch']
+	}
 
 @app.route('/', methods=['GET','POST'])
 @app.route('/index', methods=['GET','POST'])
