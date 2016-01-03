@@ -41,7 +41,11 @@ def homepage():
 # Respond to the Pi with the current desired state as set by the user.
 @app.route('/add-hvac-status', methods=['POST'])
 def update():
+	print '/add-hvac-status'
+
 	response = request.json
+	print response
+
 	roomTemperature = response['roomTemperature']
 	humidity = response['humidity']
 	coolSwitch = response['coolSwitch']
@@ -49,7 +53,6 @@ def update():
 	heatSwitch = response['heatSwitch']
 	heatTemperature = response['heatTemperature']
 	fanSwitch = response['fanSwitch']
-	print response # for debugging
 
 	# add current status received from Pi to database
 	db.addStatus(
@@ -70,6 +73,8 @@ def update():
 
 @app.route('/status', methods=['GET','POST'])
 def status():
+	print '/status'
+
 	currentLog = db.getLastStatus()
 	print currentLog # debugging only
 
