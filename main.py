@@ -122,7 +122,8 @@ def status():
 			else:
 				desiredStatus['fanSwitch'] = 0
 
-				print desiredStatus
+		print desiredStatus
+		
 		db.addStatus(
 			(
 				time.time(),
