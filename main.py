@@ -29,6 +29,9 @@ else:
 		'fanSwitch': lastRow['fanSwitch']
 	}
 
+print desiredStatus # for debugging
+
+
 @app.route('/', methods=['GET','POST'])
 @app.route('/index', methods=['GET','POST'])
 def homepage():
@@ -46,7 +49,7 @@ def update():
 	heatSwitch = response['heatSwitch']
 	heatTemperature = response['heatTemperature']
 	fanSwitch = response['fanSwitch']
-        print response # for debugging
+    print response # for debugging
 
 	# add current status received from Pi to database
 	db.addStatus(
@@ -62,6 +65,7 @@ def update():
 		)
 	)
 
+	print desiredStatus # for debugging
 	return jsonify(desiredStatus)
 
 @app.route('/status', methods=['GET','POST'])
