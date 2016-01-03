@@ -49,7 +49,7 @@ def update():
 	heatSwitch = response['heatSwitch']
 	heatTemperature = response['heatTemperature']
 	fanSwitch = response['fanSwitch']
-    print response # for debugging
+	print response # for debugging
 
 	# add current status received from Pi to database
 	db.addStatus(
@@ -122,7 +122,7 @@ def status():
 			else:
 				desiredStatus['fanSwitch'] = 0
 
-                print desiredStatus
+				print desiredStatus
 		db.addStatus(
 			(
 				time.time(),
