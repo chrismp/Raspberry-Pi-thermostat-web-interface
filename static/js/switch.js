@@ -76,7 +76,7 @@ $(function(){
 				$humidity
 			)
 		},
-		10000
+		5000
 	);
 
 	var unitDevicePartsArray = [

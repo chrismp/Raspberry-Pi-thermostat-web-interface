@@ -14,8 +14,10 @@ def makeDB():
 				roomTemperature FLOAT,
 				humidity FLOAT,
 				coolSwitch BOOLEAN DEFAULT FALSE NOT NULL,
+				coolStatus BOOLEAN DEFAULT FALSE NOT NULL,
 				coolTemperature INTEGER,
 				heatSwitch BOOLEAN DEFAULT FALSE NOT NULL,
+				heatStatus BOOLEAN DEFAULT FALSE NOT NULL,
 				heatTemperature INTEGER,
 				fanSwitch BOOLEAN DEFAULT FALSE NOT NULL
 			)
@@ -33,12 +35,16 @@ def addStatus(status):
 				roomTemperature,
 				humidity,
 				coolSwitch,
+				coolStatus,
 				coolTemperature,
 				heatSwitch,
+				heatStatus,
 				heatTemperature,
 				fanSwitch
 			)
 			VALUES (
+				%s,
+				%s,
 				%s,
 				%s,
 				%s,

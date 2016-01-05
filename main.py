@@ -14,8 +14,10 @@ app = Flask(__name__, static_url_path='')
 if db.getLastStatus()==None:
 	desiredStatus = {
 		'coolSwitch': 0,
+		# 'coolStatus': 0,
 		'coolTemperature': None,
 		'heatSwitch': 0,
+		# 'heatStatus': 0,
 		'heatTemperature': None,
 		'fanSwitch': 0
 	}
@@ -23,8 +25,10 @@ else:
 	lastRow = db.getLastStatus()
 	desiredStatus = {
 		'coolSwitch': lastRow['coolSwitch'],
+		# 'coolStatus': lastRow['coolStatus'],
 		'coolTemperature': lastRow['coolTemperature'],
 		'heatSwitch': lastRow['heatSwitch'],
+		# 'heatStatus': lastRow['heatStatus'],
 		'heatTemperature': lastRow['heatTemperature'],
 		'fanSwitch': lastRow['fanSwitch']
 	}
@@ -49,8 +53,10 @@ def update():
 	roomTemperature = response['roomTemperature']
 	humidity = response['humidity']
 	coolSwitch = response['coolSwitch']
+	coolStatus = response['coolStatus']
 	coolTemperature = response['coolTemperature']
 	heatSwitch = response['heatSwitch']
+	heatStatus = response['heatStatus']
 	heatTemperature = response['heatTemperature']
 	fanSwitch = response['fanSwitch']
 
@@ -61,8 +67,10 @@ def update():
 			roomTemperature,
 			humidity,
 			coolSwitch,
+			coolStatus,
 			coolTemperature,
 			heatSwitch,
+			heatStatus,
 			heatTemperature,
 			fanSwitch
 		)
@@ -76,13 +84,13 @@ def status():
 	print '/status'
 
 	currentLog = db.getLastStatus()
-	print currentLog # debugging only
+	# print currentLog # debugging only
 
 	# Sets new desired state based on user input.
 	# Return current state of HVAC and fan
 	if request.method == 'POST':
 		response = request.json
-		print response # debugging only
+		# print response # debugging only
 
 		# `response` won't have all the keys `desiredStatus` has.
 		# So go thru each key in `desiredStatus`.
@@ -127,20 +135,8 @@ def status():
 			else:
 				desiredStatus['fanSwitch'] = 0
 
+
 		print desiredStatus
-		
-		db.addStatus(
-			(
-				time.time(),
-				currentLog['roomTemperature'],
-				currentLog['humidity'],
-				desiredStatus['coolSwitch'],
-				desiredStatus['coolTemperature'],
-				desiredStatus['heatSwitch'],
-				desiredStatus['heatTemperature'],
-				desiredStatus['fanSwitch']
-			)
-		)
 		return jsonify(desiredStatus)
 
 	currentLog = db.getLastStatus()
@@ -154,8 +150,10 @@ def status():
 				'roomTemperature': currentLog['roomTemperature'],
 				'humidity': currentLog['humidity'],
 				'coolSwitch': currentLog['coolSwitch'],
+				'coolStatus': currentLog['coolStatus'],
 				'coolTemperature': currentLog['coolTemperature'],
 				'heatSwitch': currentLog['heatSwitch'],
+				'heatStatus': currentLog['heatStatus'],
 				'heatTemperature': currentLog['heatTemperature'],
 				'fanSwitch': currentLog['fanSwitch']	
 			}
