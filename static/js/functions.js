@@ -1,3 +1,23 @@
+function roundInt(num){
+	return Math.round(num);
+}
+
+function translateSwitch(status){
+	return status===1 ? 'On' : 'Off';
+}
+
+function translateTemperature(temp){
+	return temp===null ? 'Temperature not yet set' : temp;
+}
+
+function switchesOn(switch1, switch2){
+	return switch1.checked===true && switch2.checked===true;
+}
+
+function secondsToMilliseconds(x){
+	return x*1000;
+}
+
 function setRadioInput(arrayOfElements, statusReceivedFromServer){
 	for (var i=0; i<arrayOfElements.length; i++) {
 		var radioInput = $(arrayOfElements[i]); // Select the current radio button input using jQuery selector
@@ -15,10 +35,6 @@ function getOtherDeviceSetting(arrayOfElements){
 			return +elem.val();
 		}
 	}
-}
-
-function roundInt(num){
-	return Math.round(num);
 }
 
 function updateStatus(coolStatusElem, coolCurrentTemperatureElem, heatStatusElem, heatCurrentTemperatureElem, fanStatusElem, lastReadingElem, roomTemperatureElem, humidityElem){
@@ -40,7 +56,8 @@ function updateStatus(coolStatusElem, coolCurrentTemperatureElem, heatStatusElem
 			var heatStatus = status.heatStatus;
 			var heatTemperature = status.heatTemperature;
 			var fanSwitch = status.fanSwitch;
-			lastReadingElem.html(new Date(timeLastRead*1000));
+
+			lastReadingElem.html(new Date(timeLastRead*1000)); // Convert UNIX time to English
 			coolStatusElem.html(translateSwitch(coolStatus));
 			coolCurrentTemperatureElem.html(translateTemperature(coolTemperature));
 			heatStatusElem.html(translateSwitch(heatStatus));
@@ -52,15 +69,64 @@ function updateStatus(coolStatusElem, coolCurrentTemperatureElem, heatStatusElem
 	);
 }
 
-function translateSwitch(status){
-	console.log(status===1);
-	return status===1 ? 'On' : 'Off';
-}
+function changeDeviceSetting(device){
+	var $this = $(device);
+	var name = $this.attr('name');
 
-function translateTemperature(temp){
-	return temp===null ? 'Temperature not yet set' : temp;
-}
+	// `val` attribute of `input` user clicked.
+	// If it's a temeprature `input`, this is the temperature value, or else...
+	// ...for the others, 0 is 'off', ` is 'on'
+	var switchStatus = $this.val();
 
-function switchesOn(switch1, switch2){
-	return switch1.checked===true && switch2.checked===true;
+	var temperatureType = $this.parent()
+		.find('input[type=number]')
+		.attr('name');
+	var temperature = $this.parent()
+		.find('input[type=number]')
+		.val();
+
+	var dataToSend = {};
+	dataToSend[name] = +switchStatus;
+
+	// console.log(dataToSend);
+
+	// If user switches cool or heat...
+	// ...or changes cool or heat temperature...
+	// ...add that info to `dataToSend` object
+	if(temperatureType!=undefined){
+		dataToSend[temperatureType] = temperature;
+		dataTempType = dataToSend[temperatureType]
+
+		if(
+			(dataTempType===''||dataTempType===null) && 
+			dataToSend[name]===1
+		){
+			alert('Choose a temperature before turning this on.');
+			var $radioButtons = $('input[type="radio"][name="'+name+'"]');
+			$radioButtons[0].checked = true;
+		}
+	}
+
+	if( switchesOn($coolSwitchRadioArray[1], $heatSwitchRadioArray[1])===true ){
+		if(name==='coolSwitch'){
+			$heatSwitchRadioArray[0].checked = true;
+		} else if(name==='heatSwitch'){
+			$coolSwitchRadioArray[0].checked = true;
+		}
+	}
+
+	$.ajax({
+		url: '/status',
+		type: 'POST',
+		data: JSON.stringify(dataToSend),
+		contentType: 'application/json; charset=utf-8',
+		timeout: secondsToMilliseconds(60), // give the HVAC time to respond
+		success: function(data){
+			// Code may go here in the future
+		},
+		error: function(error){
+			alert('HVAC/fan did not get your request!');
+			console.log(error);
+		}
+	});			
 }
