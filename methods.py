@@ -6,3 +6,12 @@ def convertToF(tempC):
 
 def convertToC(tempF):
         return ((tempF - 32) / 9) * 5
+
+def inTemperatureRange(minTemp, maxTemp, temperature):
+	if temperature==None or temperature=='':
+		return False
+
+	if temperature<minTemp or temperature>maxTemp:
+		return False
+
+	return True

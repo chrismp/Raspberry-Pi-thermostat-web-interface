@@ -47,17 +47,30 @@ def homepage():
 def update():
 	print '/add-hvac-status'
 
+	minTemp = os.environ.get('MINIMUM_TEMPERATURE')
+	maxTemp = os.environ.get('MAXIMUM_TEMPERATURE')
+	coolTemperatureInRange = inTemperatureRange(minTemp, maxTemp, response['coolTemperature'])
+	heatTemperatureInRange = inTemperatureRange(minTemp, maxTemp, response['heatTemperature'])
+
 	response = request.json
 	print response
+
+	if coolTemperatureInRange==True:
+		coolTemperature = response['coolTemperature']
+	elif coolTemperatureInRange==False:
+		coolTemperature = None
+
+	if heatTemperatureInRange==True:
+		heatTemperature = response['heatTemperature']
+	elif heatTemperatureInRange==False:
+		heatTemperature = None
 
 	roomTemperature = response['roomTemperature']
 	humidity = response['humidity']
 	coolSwitch = response['coolSwitch']
 	coolStatus = response['coolStatus']
-	coolTemperature = response['coolTemperature']
 	heatSwitch = response['heatSwitch']
 	heatStatus = response['heatStatus']
-	heatTemperature = response['heatTemperature']
 	fanSwitch = response['fanSwitch']
 
 	# add current status received from Pi to database
