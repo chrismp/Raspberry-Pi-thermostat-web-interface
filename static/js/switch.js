@@ -92,10 +92,74 @@ $(function(){
 	];
 
 	var timeoutId;
-	for (var i=0; i<unitDevicePartsArray.length; i++) {
-		unitDevicePartsArray[i].click(
-			window.clearTimeout(timeoutId);
-			timeoutId = window.setTimeout( changeDeviceSetting(device), secondsToMilliseconds(2) );
-		);
+	for(var i=0; i<unitDevicePartsArray.length; i++){
+		unitDevicePartsArray[i].click(function(){
+			var self = this;
+			clearTimeout(timeoutId);
+			timeoutId = setTimeout(
+				function(){
+					var $device = $(self);
+					var name = $device.attr('name');
+
+					// `val` attribute of `input` user clicked.
+					// If it's a temeprature `input`, this is the temperature value, or else...
+					// ...for the others, 0 is 'off', ` is 'on'
+					var switchStatus = $device.val();
+
+					var temperatureType = $device.parent()
+						.find('input[type=number]')
+						.attr('name');
+					var temperature = $device.parent()
+						.find('input[type=number]')
+						.val();
+
+					var dataToSend = {};
+					dataToSend[name] = +switchStatus;
+
+
+					// If user switches cool or heat...
+					// ...or changes cool or heat temperature...
+					// ...add that info to `dataToSend` object
+					if(temperatureType!=undefined){
+						dataToSend[temperatureType] = temperature;
+						dataTempType = dataToSend[temperatureType]
+
+						if(
+							(dataTempType===''||dataTempType===null) && 
+							dataToSend[name]===1
+						){
+							alert('Choose a temperature before turning this on.');
+							var $radioButtons = $('input[type="radio"][name="'+name+'"]');
+							$radioButtons[0].checked = true;
+						}
+					}
+
+					if( switchesOn($coolSwitchRadioArray[1], $heatSwitchRadioArray[1])===true ){
+						if(name==='coolSwitch'){
+							$heatSwitchRadioArray[0].checked = true;
+						} else if(name==='heatSwitch'){
+							$coolSwitchRadioArray[0].checked = true;
+						}
+					}
+
+					$.ajax({
+						url: '/status',
+						type: 'POST',
+						data: JSON.stringify(dataToSend),
+						contentType: 'application/json; charset=utf-8',
+						timeout: secondsToMilliseconds(60), // give the HVAC time to respond
+						success: function(data){
+							// Useful code may be here one day
+							// console.log(data)
+						},
+						error: function(error){
+							alert('HVAC/fan did not get your request!');
+							console.log(error);
+						}
+					});			
+				},
+				secondsToMilliseconds(5) 
+			);
+		});
 	}
 });

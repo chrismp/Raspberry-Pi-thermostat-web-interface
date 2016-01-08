@@ -69,64 +69,69 @@ function updateStatus(coolStatusElem, coolCurrentTemperatureElem, heatStatusElem
 	);
 }
 
-function changeDeviceSetting(device){
-	var $this = $(device);
-	var name = $this.attr('name');
+// function changeDeviceSetting(device, coolSwitchRadioArray, heatSwitchRadioArray){
+// 	var $device = $(device);
+// 	var name = $device.attr('name');
 
-	// `val` attribute of `input` user clicked.
-	// If it's a temeprature `input`, this is the temperature value, or else...
-	// ...for the others, 0 is 'off', ` is 'on'
-	var switchStatus = $this.val();
+// 	// `val` attribute of `input` user clicked.
+// 	// If it's a temeprature `input`, this is the temperature value, or else...
+// 	// ...for the others, 0 is 'off', ` is 'on'
+// 	var switchStatus = $device.val();
 
-	var temperatureType = $this.parent()
-		.find('input[type=number]')
-		.attr('name');
-	var temperature = $this.parent()
-		.find('input[type=number]')
-		.val();
+// 	var temperatureType = $device.parent()
+// 		.find('input[type=number]')
+// 		.attr('name');
+// 	var temperature = $device.parent()
+// 		.find('input[type=number]')
+// 		.val();
 
-	var dataToSend = {};
-	dataToSend[name] = +switchStatus;
+// 	var dataToSend = {};
+// 	dataToSend[name] = +switchStatus;
 
-	// console.log(dataToSend);
+// 	// console.log(dataToSend);
 
-	// If user switches cool or heat...
-	// ...or changes cool or heat temperature...
-	// ...add that info to `dataToSend` object
-	if(temperatureType!=undefined){
-		dataToSend[temperatureType] = temperature;
-		dataTempType = dataToSend[temperatureType]
+// 	// If user switches cool or heat...
+// 	// ...or changes cool or heat temperature...
+// 	// ...add that info to `dataToSend` object
+// 	if(temperatureType!=undefined){
+// 		dataToSend[temperatureType] = temperature;
+// 		dataTempType = dataToSend[temperatureType]
 
-		if(
-			(dataTempType===''||dataTempType===null) && 
-			dataToSend[name]===1
-		){
-			alert('Choose a temperature before turning this on.');
-			var $radioButtons = $('input[type="radio"][name="'+name+'"]');
-			$radioButtons[0].checked = true;
-		}
-	}
+// 		if(
+// 			(dataTempType===''||dataTempType===null) && 
+// 			dataToSend[name]===1
+// 		){
+// 			alert('Choose a temperature before turning this on.');
+// 			var $radioButtons = $('input[type="radio"][name="'+name+'"]');
+// 			$radioButtons[0].checked = true;
+// 		}
+// 	}
 
-	if( switchesOn($coolSwitchRadioArray[1], $heatSwitchRadioArray[1])===true ){
-		if(name==='coolSwitch'){
-			$heatSwitchRadioArray[0].checked = true;
-		} else if(name==='heatSwitch'){
-			$coolSwitchRadioArray[0].checked = true;
-		}
-	}
+// 	console.log(coolSwitchRadioArray); 
+// 	console.log(heatSwitchRadioArray);
+// 	console.log(coolSwitchRadioArray[1]); 
+// 	console.log(heatSwitchRadioArray[1]);
 
-	$.ajax({
-		url: '/status',
-		type: 'POST',
-		data: JSON.stringify(dataToSend),
-		contentType: 'application/json; charset=utf-8',
-		timeout: secondsToMilliseconds(60), // give the HVAC time to respond
-		success: function(data){
-			// Code may go here in the future
-		},
-		error: function(error){
-			alert('HVAC/fan did not get your request!');
-			console.log(error);
-		}
-	});			
-}
+// 	if( switchesOn(coolSwitchRadioArray[1], heatSwitchRadioArray[1])===true ){
+// 		if(name==='coolSwitch'){
+// 			heatSwitchRadioArray[0].checked = true;
+// 		} else if(name==='heatSwitch'){
+// 			coolSwitchRadioArray[0].checked = true;
+// 		}
+// 	}
+
+// 	$.ajax({
+// 		url: '/status',
+// 		type: 'POST',
+// 		data: JSON.stringify(dataToSend),
+// 		contentType: 'application/json; charset=utf-8',
+// 		timeout: secondsToMilliseconds(60), // give the HVAC time to respond
+// 		success: function(data){
+// 			console.log(data)
+// 		},
+// 		error: function(error){
+// 			alert('HVAC/fan did not get your request!');
+// 			console.log(error);
+// 		}
+// 	});			
+// }
