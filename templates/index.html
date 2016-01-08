@@ -21,11 +21,11 @@
 			Heat status: <span id="heat-status"></span>, <span id="heat-current-temperature"></span>
 		</p>
 		<p>
-			Fan status: <span id="fan-status"></span>
+			Fan: <span id="fan-status"></span>
 		</p>
 	</div>
 
-	<div>
+	<div id="cool-switch-wrapper">
 		Cool
 		<div>
 			<input id="coolTemperature" type="number" name="coolTemperature" min="15" max="35" placeholder="15-35C">
@@ -35,7 +35,7 @@
 
 	</div>
 
-	<div>
+	<div id="heat-switch-wrapper">
 		Heat
 		<div>
 			<input id="heatTemperature" type="number" name="heatTemperature" min="15" max="35" placeholder="15-35C">
@@ -44,7 +44,7 @@
 		</div>
 	</div>
 
-	<div>
+	<div id="fan-switch-wrapper">
 		Fan
 		<input type="radio" name="fanSwitch" value="0">Off
 		<input type="radio" name="fanSwitch" value="1">On

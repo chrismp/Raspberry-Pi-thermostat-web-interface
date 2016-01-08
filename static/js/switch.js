@@ -32,14 +32,14 @@ $(function(){
 		'/status',
 		function(data){
 			var status = data['Status'];
-			var timeLastRead = status.timeLastRead;
-			var roomTemperature = roundInt(status.roomTemperature);
-			var humidity = roundInt(status.humidity);
-			var coolSwitch = status.coolSwitch;
-			var coolTemperature = status.coolTemperature;
-			var heatSwitch = status.heatSwitch;
-			var heatTemperature = status.heatTemperature;
-			var fanSwitch = status.fanSwitch;
+			var timeLastRead = status===null ? '' : status.timeLastRead;
+			var roomTemperature = status===null ? '' : roundInt(status.roomTemperature);
+			var humidity = status===null ? '' : roundInt(status.humidity);
+			var coolSwitch = status===null ? 0 : status.coolSwitch;
+			var coolTemperature = status===null ? '' : status.coolTemperature;
+			var heatSwitch = status===null ? 0 : status.heatSwitch;
+			var heatTemperature = status===null ? '' : status.heatTemperature;
+			var fanSwitch = status===null ? 0 : status.fanSwitch;
 
 			$coolTemperature.val(coolTemperature);
 			$heatTemperature.val(heatTemperature);
@@ -101,7 +101,9 @@ $(function(){
 	for(var i=0; i<unitDevicePartsArray.length; i++){
 		unitDevicePartsArray[i].click(function(){
 			var self = this;
+
 			clearTimeout(timeoutId);
+
 			timeoutId = setTimeout(
 				function(){
 					var $device = $(self);
@@ -119,20 +121,12 @@ $(function(){
 						.find('input[type=number]')
 						.val();
 
-					var dataToSend = {};
-					dataToSend[name] = +switchStatus;
 
-
-					// If user switches cool or heat...
-					// ...or changes cool or heat temperature...
-					// ...add that info to `dataToSend` object
+					// If user switches on Heat or Cool without setting a temperature, switch it back to "Off"
 					if(temperatureType!=undefined){
-						dataToSend[temperatureType] = temperature;
-						dataTempType = dataToSend[temperatureType]
-
 						if(
-							(dataTempType===''||dataTempType===null) && 
-							dataToSend[name]===1
+							(temperature===''||temperature===null) && 
+							+switchStatus===1
 						){
 							alert('Choose a temperature before turning this on.');
 							var $radioButtons = $('input[type="radio"][name="'+name+'"]');
@@ -147,6 +141,13 @@ $(function(){
 							$coolSwitchRadioArray[0].checked = true;
 						}
 					}
+					
+					var dataToSend = {};
+					dataToSend['coolTemperature'] = +$coolTemperature.val();
+					dataToSend['coolSwitch'] = deviceSwitchStatus($coolSwitchRadioArray[0]);
+					dataToSend['heatTemperature'] = +$heatTemperature.val();
+					dataToSend['heatSwitch'] = deviceSwitchStatus($heatSwitchRadioArray[0]);
+					dataToSend['fanSwitch'] = deviceSwitchStatus($fanSwitchRadioArray[0]);
 
 					$.ajax({
 						url: '/status',
@@ -156,7 +157,7 @@ $(function(){
 						timeout: secondsToMilliseconds(60), // give the HVAC time to respond
 						success: function(data){
 							// Useful code may be here one day
-							// console.log(data)
+							console.log(data)
 						},
 						error: function(error){
 							alert('HVAC/fan did not get your request!');

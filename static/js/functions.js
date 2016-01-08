@@ -2,6 +2,11 @@ function roundInt(num){
 	return Math.round(num);
 }
 
+function deviceSwitchStatus(radioButtonElement){
+	console.log(radioButtonElement);
+	return radioButtonElement.checked ? 0 : 1;
+}
+
 function translateSwitch(status){
 	return status===1 ? 'On' : 'Off';
 }
