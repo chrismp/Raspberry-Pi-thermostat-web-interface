@@ -37,7 +37,7 @@ function getOtherDeviceSetting(arrayOfElements){
 	}
 }
 
-function updateStatus(coolStatusElem, coolCurrentTemperatureElem, heatStatusElem, heatCurrentTemperatureElem, fanStatusElem, lastReadingElem, roomTemperatureElem, humidityElem){
+function updateStatus(coolSwitchStatusElem, coolStatusElem, coolCurrentTemperatureElem, heatSwitchStatusElem, heatStatusElem, heatCurrentTemperatureElem, fanStatusElem, lastReadingElem, roomTemperatureElem, humidityElem){
 	$.get(
 		'/status',
 		function(data){
@@ -58,8 +58,10 @@ function updateStatus(coolStatusElem, coolCurrentTemperatureElem, heatStatusElem
 			var fanSwitch = status.fanSwitch;
 
 			lastReadingElem.html(new Date(timeLastRead*1000)); // Convert UNIX time to English
+			coolSwitchStatusElem.html(translateSwitch(coolSwitch));
 			coolStatusElem.html(translateSwitch(coolStatus));
 			coolCurrentTemperatureElem.html(translateTemperature(coolTemperature));
+			heatSwitchStatusElem.html(translateSwitch(heatSwitch));
 			heatStatusElem.html(translateSwitch(heatStatus));
 			heatCurrentTemperatureElem.html(translateTemperature(heatTemperature));
 			fanStatusElem.html(translateSwitch(fanSwitch));

@@ -1,7 +1,9 @@
 $(function(){
 	var $clock = $('#clock');
+	var $coolSwitchStatus = $('#cool-switch-status');
 	var $coolStatus = $('#cool-status');
 	var $coolCurrentTemperature = $('#cool-current-temperature');
+	var $heatSwitchStatus = $('#heat-switch-status');
 	var $heatStatus = $('#heat-status');
 	var $heatCurrentTemperature = $('#heat-current-temperature');
 	var $fanStatus = $('#fan-status')
@@ -49,8 +51,10 @@ $(function(){
 
 	// Grab latest HVAC status and show it on page
 	updateStatus(
+		$coolSwitchStatus,
 		$coolStatus,
 		$coolCurrentTemperature,
+		$heatSwitchStatus,
 		$heatStatus,
 		$heatCurrentTemperature,
 		$fanStatus,
@@ -70,8 +74,10 @@ $(function(){
 	window.setInterval(
 		function(){
 			updateStatus(
+				$coolSwitchStatus,
 				$coolStatus,
 				$coolCurrentTemperature,
+				$heatSwitchStatus,
 				$heatStatus,
 				$heatCurrentTemperature,
 				$fanStatus,
