@@ -11,13 +11,14 @@ import methods
 
 app = Flask(__name__, static_url_path='')
 
+# `desiredStatus` represents what the user wants: the cool and heat switches/temperatures and the fan.
+# If the data table is empty, set `desiredStatus` info to empty -- switches turned off, and no value for temperature settings
+# If data table has info, get the last row and puts its info in `desiredStatus`
 if db.getLastStatus()==None:
 	desiredStatus = {
 		'coolSwitch': 0,
-		# 'coolStatus': 0,
 		'coolTemperature': None,
 		'heatSwitch': 0,
-		# 'heatStatus': 0,
 		'heatTemperature': None,
 		'fanSwitch': 0
 	}
@@ -25,10 +26,8 @@ else:
 	lastRow = db.getLastStatus()
 	desiredStatus = {
 		'coolSwitch': lastRow['coolSwitch'],
-		# 'coolStatus': lastRow['coolStatus'],
 		'coolTemperature': lastRow['coolTemperature'],
 		'heatSwitch': lastRow['heatSwitch'],
-		# 'heatStatus': lastRow['heatStatus'],
 		'heatTemperature': lastRow['heatTemperature'],
 		'fanSwitch': lastRow['fanSwitch']
 	}
@@ -36,24 +35,29 @@ else:
 print desiredStatus # for debugging
 
 
+# Open the front page
 @app.route('/', methods=['GET','POST'])
 @app.route('/index', methods=['GET','POST'])
 def homepage():
 	return render_template('index.html')
 
-# Receive information from the Raspberry Pi about the air conditioner's state and add to the database. 
-# Respond to the Pi with the current desired state as set by the user.
+# The Pi sends a POST request containing HVAC's/thermostat's status.
+# This part of the program cleans the POST request info and inserts it into the MySQL data table.
+# After insertion, the program returns to the Pi a JSON string containing info from `desiredStatus`
 @app.route('/add-hvac-status', methods=['POST'])
 def update():
-	print '/add-hvac-status'
+	print '/add-hvac-status' # for debugging
 
+	# The highest and lowest temperatures a user can set are put in environment variables.
 	minTemp = os.environ.get('MINIMUM_TEMPERATURE')
 	maxTemp = os.environ.get('MAXIMUM_TEMPERATURE')
+
 	coolTemperatureInRange = inTemperatureRange(minTemp, maxTemp, response['coolTemperature'])
 	heatTemperatureInRange = inTemperatureRange(minTemp, maxTemp, response['heatTemperature'])
 
-	response = request.json
-	print response
+	response = request.json # Decode the JSON sent by the Pi's POST request
+	print response # for debugging
+
 
 	if coolTemperatureInRange==True:
 		coolTemperature = response['coolTemperature']
@@ -92,9 +96,11 @@ def update():
 	print desiredStatus # for debugging
 	return jsonify(desiredStatus)
 
+# a GET request returns a JSON string with the last row from the HVAC/thermostat data table
+# a POST request updates `desiredStatus` with what the user wants for thermostat settings
 @app.route('/status', methods=['GET','POST'])
 def status():
-	print '/status'
+	print '/status' # for debugging
 
 	currentLog = db.getLastStatus()
 	# print currentLog # debugging only
@@ -172,6 +178,7 @@ def status():
 			}
 		}
 	)
+
 
 if __name__=='__main__':
 	app.run(debug=True)
