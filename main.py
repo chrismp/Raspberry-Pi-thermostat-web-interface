@@ -52,12 +52,9 @@ def update():
 	minTemp = os.environ.get('MINIMUM_TEMPERATURE')
 	maxTemp = os.environ.get('MAXIMUM_TEMPERATURE')
 
-	coolTemperatureInRange = inTemperatureRange(minTemp, maxTemp, response['coolTemperature'])
-	heatTemperatureInRange = inTemperatureRange(minTemp, maxTemp, response['heatTemperature'])
-
 	response = request.json # Decode the JSON sent by the Pi's POST request
-	print response # for debugging
-
+	coolTemperatureInRange = methods.inTemperatureRange(minTemp, maxTemp, response['coolTemperature'])
+	heatTemperatureInRange = methods.inTemperatureRange(minTemp, maxTemp, response['heatTemperature'])
 
 	if coolTemperatureInRange==True:
 		coolTemperature = response['coolTemperature']
@@ -93,7 +90,7 @@ def update():
 		)
 	)
 
-	print desiredStatus # for debugging
+	print "desiredStatus: ", desiredStatus # for debugging
 	return jsonify(desiredStatus)
 
 # a GET request returns a JSON string with the last row from the HVAC/thermostat data table
