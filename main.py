@@ -49,10 +49,11 @@ def update():
 	print '/add-hvac-status' # for debugging
 
 	# The highest and lowest temperatures a user can set are put in environment variables.
-	minTemp = os.environ.get('MINIMUM_TEMPERATURE')
-	maxTemp = os.environ.get('MAXIMUM_TEMPERATURE')
+	minTemp = int( os.environ.get('MINIMUM_TEMPERATURE') )
+	maxTemp = int( os.environ.get('MAXIMUM_TEMPERATURE') )
 
 	response = request.json # Decode the JSON sent by the Pi's POST request
+	print "response ", response
 	coolTemperatureInRange = methods.inTemperatureRange(minTemp, maxTemp, response['coolTemperature'])
 	heatTemperatureInRange = methods.inTemperatureRange(minTemp, maxTemp, response['heatTemperature'])
 
@@ -60,6 +61,8 @@ def update():
 		coolTemperature = response['coolTemperature']
 	elif coolTemperatureInRange==False:
 		coolTemperature = None
+
+	print(coolTemperature)
 
 	if heatTemperatureInRange==True:
 		heatTemperature = response['heatTemperature']
@@ -130,6 +133,7 @@ def status():
 
 			if 'coolTemperature' in response:
 				if methods.blankOrNone(response['coolTemperature']):
+					print("coolTemperature is None or an empty string")
 					desiredStatus['coolSwitch'] = 0
 					desiredStatus['coolTemperature'] = None
 
@@ -152,7 +156,7 @@ def status():
 				desiredStatus['fanSwitch'] = 0
 
 
-		print desiredStatus
+		# print(desiredStatus)
 		return jsonify(desiredStatus)
 
 	currentLog = db.getLastStatus()
